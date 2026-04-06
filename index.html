@@ -2132,6 +2132,14 @@ INSTRUCTIONS :
       })
     });
     const data = await resp.json();
+    if (data.error) {
+      document.getElementById('typ')?.remove();
+      addMsg('bot', "Désolé, il y a eu un souci technique. Réessaie dans un instant !");
+      console.error('API error:', data.error);
+      sbtn.disabled = false;
+      inp.focus();
+      return;
+    }
     const reply = data.content?.[0]?.text || "Oups, une erreur s'est produite. Réessaie !";
     document.getElementById('typ')?.remove();
     addMsg('bot', fmt(reply));
