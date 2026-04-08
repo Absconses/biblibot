@@ -2121,7 +2121,7 @@ INSTRUCTIONS :
 - Sois concis (3-5 phrases max), enthousiaste, mets en valeur ce qui rend chaque livre spécial.`;
 
   try {
-    const resp = await fetch('/.netlify/functions/chat', {
+    const resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
