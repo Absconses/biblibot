@@ -28,8 +28,18 @@
   .typing span:nth-child(3) { animation-delay: .4s; }
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
   #quick { display: flex; gap: 8px; flex-wrap: wrap; }
-  .qb { font-size: 12.5px; padding: 6px 15px; border-radius: 22px; border: 1px solid #d4c4a8; background: #fffcf7; color: #6b4c30; cursor: pointer; transition: all .2s; font-weight: 500; }
-  .qb:hover { background: #f5ead6; border-color: #b08968; color: #4a2c17; transform: translateY(-1px); }
+  .qb { font-size: 12.5px; padding: 6px 15px; border-radius: 22px; border: 1px solid; cursor: pointer; transition: all .2s; font-weight: 600; }
+  .qb:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  .qb-aventure { background: #fff3e0; color: #e65100; border-color: #ffb74d; }
+  .qb-enquete { background: #fce4ec; color: #c62828; border-color: #ef9a9a; }
+  .qb-fantastique { background: #263238; color: #eceff1; border-color: #546e7a; }
+  .qb-fantasy { background: #e3f2fd; color: #1565c0; border-color: #90caf9; }
+  .qb-sf { background: #eceff1; color: #455a64; border-color: #b0bec5; }
+  .qb-societe { background: #f3e5f5; color: #7b1fa2; border-color: #ce93d8; }
+  .qb-humour { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
+  .qb-mythe { background: #fffde7; color: #f57f17; border-color: #fff176; }
+  .qb-neutre { background: #fffcf7; color: #6b4c30; border-color: #d4c4a8; }
+  .qb-classique { background: #efebe9; color: #4e342e; border-color: #bcaaa4; }
   #irow { display: flex; gap: 8px; }
   #inp { flex: 1; font-size: 14px; border-radius: 14px; border: 1px solid #d4c4a8; padding: 11px 16px; background: #fffcf7; color: #3a2a1a; outline: none; transition: border-color .2s; }
   #inp:focus { border-color: #8b4513; box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1); }
@@ -50,14 +60,21 @@
   </header>
   <div id="chat"></div>
   <div id="quick">
-    <button class="qb" onclick="qa(&quot;Je veux un roman d'aventure&quot;)">Aventure</button>
-    <button class="qb" onclick="qa(&quot;Un livre qui fait peur&quot;)">Frissons</button>
-    <button class="qb" onclick="qa(&quot;Quelque chose de drôle&quot;)">Humour</button>
-    <button class="qb" onclick="qa(&quot;Un livre pas trop long&quot;)">Lecture facile</button>
-    <button class="qb" onclick="qa(&quot;Un classique français&quot;)">Classiques</button>
-    <button class="qb" onclick="qa(&quot;Un livre en anglais pour pratiquer&quot;)">En anglais</button>
-    <button class="qb" onclick="qa(&quot;Un roman policier&quot;)">Policier</button>
-    <button class="qb" onclick="qa(&quot;Un livre sur l'histoire&quot;)">Histoire</button>
+    <button class="qb qb-aventure" onclick="qa(&quot;Je cherche un roman d'aventure&quot;)">Aventure</button>
+    <button class="qb qb-enquete" onclick="qa(&quot;Je veux un roman policier ou une enqu&ecirc;te&quot;)">Enqu&ecirc;te</button>
+    <button class="qb qb-fantastique" onclick="qa(&quot;Un livre fantastique ou qui fait frissonner&quot;)">Fantastique &amp; Frisson</button>
+    <button class="qb qb-fantasy" onclick="qa(&quot;Un livre de fantasy ou de merveilleux&quot;)">Fantasy &amp; Merveilleux</button>
+    <button class="qb qb-sf" onclick="qa(&quot;Un livre de science-fiction ou de dystopie&quot;)">SF &amp; Dystopie</button>
+    <button class="qb qb-societe" onclick="qa(&quot;Un livre sur la soci&eacute;t&eacute;, le monde d'aujourd'hui&quot;)">Soci&eacute;t&eacute;</button>
+    <button class="qb qb-humour" onclick="qa(&quot;Quelque chose de dr&ocirc;le et l&eacute;ger&quot;)">Humour</button>
+    <button class="qb qb-mythe" onclick="qa(&quot;Un livre sur les mythes, l&eacute;gendes ou l'histoire&quot;)">Mythes &amp; R&eacute;cits historiques</button>
+    <button class="qb qb-classique" onclick="qa(&quot;Un classique de la litt&eacute;rature&quot;)">Classique</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un livre facile &agrave; lire, pas trop long&quot;)">Facile &agrave; lire</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un conte ou un recueil de contes&quot;)">Conte</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Une pi&egrave;ce de th&eacute;&acirc;tre&quot;)">Th&eacute;&acirc;tre</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un recueil de po&eacute;sie&quot;)">Po&eacute;sie</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un manga&quot;)">Manga</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Une bande dessin&eacute;e ou un roman graphique&quot;)">Roman graphique</button>
   </div>
   <div id="irow">
     <input id="inp" type="text" placeholder="Dis-moi ce que tu aimes…" onkeydown="if(event.key==='Enter')send()" />
