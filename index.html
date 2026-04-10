@@ -2120,17 +2120,27 @@ INSTRUCTIONS :
 - Pose parfois une question pour mieux cerner les goûts de l'élève.
 - Sois concis (3-5 phrases max), enthousiaste, mets en valeur ce qui rend chaque livre spécial.`;
 
+  const payload = {
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 1000,
+    system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+    messages: history.slice(-12)
+  };
+
   try {
-    const resp = await fetch('/api/chat', {
+    let resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system,
-        messages: history.slice(-12)
-      })
+      body: JSON.stringify(payload)
     });
+    if (resp.status === 429) {
+      await new Promise(r => setTimeout(r, 2000));
+      resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
     const data = await resp.json();
     if (data.error) {
       document.getElementById('typ')?.remove();
