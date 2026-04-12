@@ -40,6 +40,11 @@
   .qb-mythe { background: #fffde7; color: #f57f17; border-color: #fff176; }
   .qb-neutre { background: #fffcf7; color: #6b4c30; border-color: #d4c4a8; }
   .qb-classique { background: #efebe9; color: #4e342e; border-color: #bcaaa4; }
+  .covers { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e8dcc8; }
+  .cover-card { text-align: center; max-width: 90px; }
+  .cover-card img { width: 80px; height: 115px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform .2s; }
+  .cover-card img:hover { transform: scale(1.08); }
+  .cover-card p { font-size: 10px; margin-top: 4px; color: #6b4c30; line-height: 1.2; word-break: break-word; }
   #irow { display: flex; gap: 8px; }
   #inp { flex: 1; font-size: 14px; border-radius: 14px; border: 1px solid #d4c4a8; padding: 11px 16px; background: #fffcf7; color: #3a2a1a; outline: none; transition: border-color .2s; }
   #inp:focus { border-color: #8b4513; box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1); }
@@ -2107,6 +2112,35 @@ function fmt(t) {
   return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
 }
 
+async function fetchCover(title) {
+  try {
+    const resp = await fetch('https://www.googleapis.com/books/v1/volumes?q=intitle:' + encodeURIComponent(title) + '&maxResults=1');
+    const data = await resp.json();
+    const img = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+    return img ? img.replace('http://', 'https://') : null;
+  } catch { return null; }
+}
+
+async function addCovers(titles) {
+  if (!titles.length) return;
+  const results = await Promise.all(titles.map(async t => ({ title: t, url: await fetchCover(t) })));
+  const found = results.filter(r => r.url);
+  if (!found.length) return;
+  const lastBub = chat.querySelectorAll('.msg.bot .bub');
+  const bub = lastBub[lastBub.length - 1];
+  if (!bub) return;
+  const div = document.createElement('div');
+  div.className = 'covers';
+  found.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'cover-card';
+    card.innerHTML = '<img src="' + r.url + '" alt="' + r.title + '" loading="lazy"><p>' + r.title + '</p>';
+    div.appendChild(card);
+  });
+  bub.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
 function addTyping() {
   const d = document.createElement('div');
   d.className = 'msg bot'; d.id = 'typ';
@@ -2175,6 +2209,8 @@ RÈGLES :
     document.getElementById('typ')?.remove();
     addMsg('bot', fmt(reply));
     history.push({ role: 'assistant', content: reply });
+    const titles = [...reply.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]);
+    addCovers(titles);
   } catch(e) {
     document.getElementById('typ')?.remove();
     addMsg('bot', "Erreur de connexion. Réessaie dans un instant !");
