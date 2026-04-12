@@ -2131,6 +2131,8 @@ The Young King and other stories | Wilde, Oscar | WIL
 Une bouteille dans la mer de Gaza | Zenatti, Valérie | ZEN
 Le XXe siècle en manga. 3 De la fin de la Seconde guerre mondiale aux attentats du 11 septembre 2001 | Kan, Yöko / Nanbö, Hidehisa / Villeneuve, Marie / Estager, Aurélien | ¨M HIS`;
 
+const TITLES_SET = new Set(CATALOGUE.split('\n').map(l => l.split('|')[0].trim().toLowerCase()));
+
 const chat = document.getElementById('chat');
 const inp = document.getElementById('inp');
 const sbtn = document.getElementById('sbtn');
@@ -2241,7 +2243,7 @@ RÈGLES :
 - Propose 1 à 3 livres par réponse.
 - SOIS LOQUACE : Pour chaque livre, ne te contente pas d'un résumé. Décris l'ambiance du livre (est-ce sombre, héroïque, drôle, mystérieux ?), parle des émotions que l'élève va ressentir.
 - ARGUMENTE : Explique précisément pourquoi ce livre correspond à la demande. "Si tu aimes l'aventure, ce livre va te transporter parce que..."
-- FORMATAGE : Utilise le gras (**titre**) pour les titres et indique la [Cote] entre crochets.
+- FORMATAGE : Utilise le gras (**titre**) UNIQUEMENT pour les titres de livres, jamais pour d'autres mots. Indique la [Cote] entre crochets.
 - Si un livre demandé est absent du catalogue, dis-le honnêtement et propose une alternative du catalogue.
 - Termine toujours en ouvrant la discussion : "Est-ce que l'un de ces univers te tente, ou veux-tu que je cherche quelque chose de plus précis ?"
 - TON : Chaleureux, littéraire, entraînant et complice. Utilise un vocabulaire riche mais accessible pour des collégiens (11-15 ans).
@@ -2281,7 +2283,7 @@ RÈGLES :
     document.getElementById('typ')?.remove();
     addMsg('bot', fmt(reply));
     history.push({ role: 'assistant', content: reply });
-    const titles = [...reply.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]);
+    const titles = [...reply.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]).filter(t => TITLES_SET.has(t.toLowerCase()));
     addCovers(titles);
   } catch(e) {
     document.getElementById('typ')?.remove();
