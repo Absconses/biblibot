@@ -2131,7 +2131,11 @@ The Young King and other stories | Wilde, Oscar | WIL
 Une bouteille dans la mer de Gaza | Zenatti, Valérie | ZEN
 Le XXe siècle en manga. 3 De la fin de la Seconde guerre mondiale aux attentats du 11 septembre 2001 | Kan, Yöko / Nanbö, Hidehisa / Villeneuve, Marie / Estager, Aurélien | ¨M HIS`;
 
-const TITLES_SET = new Set(CATALOGUE.split('\n').map(l => l.split('|')[0].trim().toLowerCase()));
+const TITLES_LIST = CATALOGUE.split('\n').map(l => l.split('|')[0].trim().toLowerCase());
+function isBookTitle(t) {
+  const low = t.toLowerCase();
+  return low.length >= 3 && TITLES_LIST.some(title => title.includes(low));
+}
 
 const chat = document.getElementById('chat');
 const inp = document.getElementById('inp');
@@ -2283,7 +2287,7 @@ RÈGLES :
     document.getElementById('typ')?.remove();
     addMsg('bot', fmt(reply));
     history.push({ role: 'assistant', content: reply });
-    const titles = [...reply.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]).filter(t => TITLES_SET.has(t.toLowerCase()));
+    const titles = [...reply.matchAll(/\*\*(.*?)\*\*/g)].map(m => m[1]).filter(isBookTitle);
     addCovers(titles);
   } catch(e) {
     document.getElementById('typ')?.remove();
