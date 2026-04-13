@@ -16,6 +16,24 @@
   .hdr-actions { margin-left: auto; display: flex; gap: 6px; }
   .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #d4c4a8; background: #fffcf7; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all .2s; }
   .icon-btn:hover { transform: translateY(-1px); background: #f5ead6; }
+
+  .info-panel { background: #fffcf7; border: 1px solid #e8dcc8; border-radius: 14px; padding: 16px 18px; font-size: 13px; line-height: 1.6; color: #4a3a2a; transition: background .3s, border-color .3s; }
+  .info-panel summary { cursor: pointer; font-weight: 600; font-size: 14px; color: #6b4c30; list-style: none; display: flex; align-items: center; gap: 8px; }
+  .info-panel summary::-webkit-details-marker { display: none; }
+  .info-panel summary::before { content: ''; display: inline-block; width: 0; height: 0; border-left: 6px solid #8b4513; border-top: 4px solid transparent; border-bottom: 4px solid transparent; transition: transform .2s; }
+  .info-panel[open] summary::before { transform: rotate(90deg); }
+  .info-panel .panel-content { margin-top: 12px; }
+  .info-panel h4 { font-size: 13px; color: #8b4513; margin: 10px 0 4px; }
+  .info-panel h4:first-child { margin-top: 0; }
+  .info-panel ul { margin: 4px 0 8px 18px; }
+  .info-panel li { margin-bottom: 2px; }
+  .info-panel .warn { background: #fff3e0; border-left: 3px solid #ff9800; padding: 8px 12px; border-radius: 0 8px 8px 0; margin-top: 10px; font-size: 12px; color: #6b4c30; }
+
+  body.dark .info-panel { background: #1e1e30; border-color: #2a2a40; color: #d0c5b5; }
+  body.dark .info-panel summary { color: #c0a880; }
+  body.dark .info-panel summary::before { border-left-color: #c0a880; }
+  body.dark .info-panel h4 { color: #c0a880; }
+  body.dark .info-panel .warn { background: #2a2520; border-left-color: #ff9800; color: #d0c5b5; }
   #chat { background: #fffcf7; border-radius: 18px; border: 1px solid #e8dcc8; min-height: 380px; max-height: 500px; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; box-shadow: 0 2px 16px rgba(139, 69, 19, 0.06); transition: background .3s, border-color .3s; }
   .msg { display: flex; gap: 10px; align-items: flex-end; animation: fadeSlide .4s ease-out; }
   .msg.user { flex-direction: row-reverse; }
@@ -127,6 +145,41 @@
     <input id="inp" type="text" placeholder="Dis-moi ce que tu aimes…" onkeydown="if(event.key==='Enter')send()" />
     <button id="sbtn" onclick="send()">Envoyer</button>
   </div>
+
+  <details class="info-panel">
+    <summary>&#128270; Comment trouver un livre au CDI ?</summary>
+    <div class="panel-content">
+      <h4>Les cotes, c'est quoi ?</h4>
+      <p>Chaque livre a une <strong>cote</strong> (ex : R&nbsp;BOT, T&nbsp;MOL, P&nbsp;PRE). C'est son &laquo;&nbsp;adresse&nbsp;&raquo; dans le CDI. La cote est inscrite sur l'&eacute;tiquette au dos du livre.</p>
+      <h4>Romans (cote R + 3 lettres)</h4>
+      <ul>
+        <li><strong>R</strong> = Roman, suivi des 3 premi&egrave;res lettres du nom de l'auteur</li>
+        <li>Rang&eacute;s au <strong>secteur Litt&eacute;rature (800)</strong>, class&eacute;s par genre :</li>
+        <li>Aventure &bull; Enqu&ecirc;te &bull; Fantastique &amp; Frisson &bull; Fantasy &amp; Merveilleux &bull; SF &amp; Dystopie &bull; Soci&eacute;t&eacute; &bull; Humour &bull; Mythes &amp; R&eacute;cits historiques &bull; Classique</li>
+      </ul>
+      <h4>Po&eacute;sie (cote P + 3 lettres)</h4>
+      <ul><li>Rang&eacute;e au <strong>secteur Litt&eacute;rature (800)</strong></li></ul>
+      <h4>Th&eacute;&acirc;tre (cote T + 3 lettres)</h4>
+      <ul><li>Rang&eacute; au <strong>secteur Litt&eacute;rature (800)</strong></li></ul>
+      <h4>Romans graphiques</h4>
+      <ul><li>Rang&eacute;s au <strong>secteur Litt&eacute;rature (800)</strong></li></ul>
+      <h4>BD et Mangas</h4>
+      <ul><li>Rang&eacute;s dans le <strong>rayonnage pr&egrave;s du canap&eacute;</strong></li></ul>
+    </div>
+  </details>
+
+  <details class="info-panel">
+    <summary>&#129302; &Agrave; propos de l'IA et de ce chatbot</summary>
+    <div class="panel-content">
+      <p>Ce chatbot utilise une <strong>intelligence artificielle</strong> (Claude, cr&eacute;&eacute; par Anthropic) pour te recommander des livres du CDI.</p>
+      <h4>Comment &ccedil;a marche ?</h4>
+      <p>L'IA a re&ccedil;u la liste compl&egrave;te de nos livres et te propose des titres en fonction de tes go&ucirc;ts. Elle ne &laquo;&nbsp;comprend&nbsp;&raquo; pas les livres comme un humain : elle g&eacute;n&egrave;re du texte en fonction de probabilit&eacute;s.</p>
+      <h4>Qu'est-ce qu'une hallucination ?</h4>
+      <p>Parfois, l'IA <strong>invente des informations</strong> qui semblent vraies mais qui sont fausses. C'est ce qu'on appelle une <strong>&laquo;&nbsp;hallucination&nbsp;&raquo;</strong>. Par exemple, elle pourrait d&eacute;crire un livre de mani&egrave;re incorrecte ou inventer un r&eacute;sum&eacute;.</p>
+      <div class="warn">&#9888;&#65039; V&eacute;rifie toujours ! Si une description te semble &eacute;trange, demande &agrave; ton professeur documentaliste. L'IA est un outil, pas une source fiable &agrave; 100&nbsp;%.</div>
+    </div>
+  </details>
+
 </div>
 <script>
 const CATALOGUE = `Apprendre à coder en s'amusant | McCue, Camille | 005 MAC
