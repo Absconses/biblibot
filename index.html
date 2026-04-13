@@ -48,7 +48,8 @@
   .typing span { width: 7px; height: 7px; background: #b08968; border-radius: 50%; animation: bounce 1.2s infinite; }
   .typing span:nth-child(2) { animation-delay: .2s; }
   .typing span:nth-child(3) { animation-delay: .4s; }
-  .typing-text { font-size: 12px; color: #8b7355; font-style: italic; margin-left: 6px; }
+  .typing-text { font-size: 13px; color: #8b7355; font-style: italic; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
   #quick { display: flex; gap: 8px; flex-wrap: wrap; }
   .qb { font-size: 12.5px; padding: 6px 15px; border-radius: 22px; border: 1px solid; cursor: pointer; transition: all .2s; font-weight: 600; }
@@ -2268,7 +2269,7 @@ async function addCovers(titles) {
 function addTyping() {
   const d = document.createElement('div');
   d.className = 'msg bot'; d.id = 'typ';
-  d.innerHTML = '<div class="av bot">📚</div><div class="bub"><div class="typing"><span></span><span></span><span></span><span class="typing-text">Le Guide cherche dans ses rayons\u2026</span></div></div>';
+  d.innerHTML = '<div class="av bot">📚</div><div class="bub"><span class="typing-text">Le Guide cherche dans ses rayons\u2026</span></div>';
   chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
 }
 
