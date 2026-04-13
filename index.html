@@ -123,28 +123,6 @@
       <button class="icon-btn" onclick="clearChat()" title="Nouvelle conversation">&#128465;</button>
     </div>
   </header>
-  <div id="chat"></div>
-  <div id="quick">
-    <button class="qb qb-aventure" onclick="qa(&quot;Je cherche un roman d'aventure&quot;)">Aventure</button>
-    <button class="qb qb-enquete" onclick="qa(&quot;Je veux un roman policier ou une enqu&ecirc;te&quot;)">Enqu&ecirc;te</button>
-    <button class="qb qb-fantastique" onclick="qa(&quot;Un livre fantastique ou qui fait frissonner&quot;)">Fantastique &amp; Frisson</button>
-    <button class="qb qb-fantasy" onclick="qa(&quot;Un livre de fantasy ou de merveilleux&quot;)">Fantasy &amp; Merveilleux</button>
-    <button class="qb qb-sf" onclick="qa(&quot;Un livre de science-fiction ou de dystopie&quot;)">SF &amp; Dystopie</button>
-    <button class="qb qb-societe" onclick="qa(&quot;Un livre sur la soci&eacute;t&eacute;, le monde d'aujourd'hui&quot;)">Soci&eacute;t&eacute;</button>
-    <button class="qb qb-humour" onclick="qa(&quot;Quelque chose de dr&ocirc;le et l&eacute;ger&quot;)">Humour</button>
-    <button class="qb qb-mythe" onclick="qa(&quot;Un livre sur les mythes, l&eacute;gendes ou l'histoire&quot;)">Mythes &amp; R&eacute;cits historiques</button>
-    <button class="qb qb-classique" onclick="qa(&quot;Un classique de la litt&eacute;rature&quot;)">Classique</button>
-    <button class="qb qb-neutre" onclick="qa(&quot;Un livre facile &agrave; lire, pas trop long&quot;)">Facile &agrave; lire</button>
-    <button class="qb qb-neutre" onclick="qa(&quot;Un conte ou un recueil de contes&quot;)">Conte</button>
-    <button class="qb qb-neutre" onclick="qa(&quot;Une pi&egrave;ce de th&eacute;&acirc;tre&quot;)">Th&eacute;&acirc;tre</button>
-    <button class="qb qb-neutre" onclick="qa(&quot;Un recueil de po&eacute;sie&quot;)">Po&eacute;sie</button>
-    <button class="qb qb-neutre" onclick="qa(&quot;Un manga&quot;)">Manga</button>
-    <button class="qb qb-neutre" onclick="qa(&quot;Une bande dessin&eacute;e ou un roman graphique&quot;)">Roman graphique</button>
-  </div>
-  <div id="irow">
-    <input id="inp" type="text" placeholder="Dis-moi ce que tu aimes…" onkeydown="if(event.key==='Enter')send()" />
-    <button id="sbtn" onclick="send()">Envoyer</button>
-  </div>
 
   <details class="info-panel">
     <summary>&#128270; Comment trouver un livre au CDI ?</summary>
@@ -179,6 +157,29 @@
       <div class="warn">&#9888;&#65039; V&eacute;rifie toujours ! Si une description te semble &eacute;trange, demande &agrave; ton professeur documentaliste. L'IA est un outil, pas une source fiable &agrave; 100&nbsp;%.</div>
     </div>
   </details>
+
+  <div id="chat"></div>
+  <div id="quick">
+    <button class="qb qb-aventure" onclick="qa(&quot;Je cherche un roman d'aventure&quot;)">Aventure</button>
+    <button class="qb qb-enquete" onclick="qa(&quot;Je veux un roman policier ou une enqu&ecirc;te&quot;)">Enqu&ecirc;te</button>
+    <button class="qb qb-fantastique" onclick="qa(&quot;Un livre fantastique ou qui fait frissonner&quot;)">Fantastique &amp; Frisson</button>
+    <button class="qb qb-fantasy" onclick="qa(&quot;Un livre de fantasy ou de merveilleux&quot;)">Fantasy &amp; Merveilleux</button>
+    <button class="qb qb-sf" onclick="qa(&quot;Un livre de science-fiction ou de dystopie&quot;)">SF &amp; Dystopie</button>
+    <button class="qb qb-societe" onclick="qa(&quot;Un livre sur la soci&eacute;t&eacute;, le monde d'aujourd'hui&quot;)">Soci&eacute;t&eacute;</button>
+    <button class="qb qb-humour" onclick="qa(&quot;Quelque chose de dr&ocirc;le et l&eacute;ger&quot;)">Humour</button>
+    <button class="qb qb-mythe" onclick="qa(&quot;Un livre sur les mythes, l&eacute;gendes ou l'histoire&quot;)">Mythes &amp; R&eacute;cits historiques</button>
+    <button class="qb qb-classique" onclick="qa(&quot;Un classique de la litt&eacute;rature&quot;)">Classique</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un livre facile &agrave; lire, pas trop long&quot;)">Facile &agrave; lire</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un conte ou un recueil de contes&quot;)">Conte</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Une pi&egrave;ce de th&eacute;&acirc;tre&quot;)">Th&eacute;&acirc;tre</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un recueil de po&eacute;sie&quot;)">Po&eacute;sie</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Un manga&quot;)">Manga</button>
+    <button class="qb qb-neutre" onclick="qa(&quot;Une bande dessin&eacute;e ou un roman graphique&quot;)">Roman graphique</button>
+  </div>
+  <div id="irow">
+    <input id="inp" type="text" placeholder="Dis-moi ce que tu aimes…" onkeydown="if(event.key==='Enter')send()" />
+    <button id="sbtn" onclick="send()">Envoyer</button>
+  </div>
 
 </div>
 <script>
