@@ -1512,10 +1512,10 @@ function fmt(t) {
 
 async function fetchCover(title) {
   try {
-    const resp = await fetch('https://www.googleapis.com/books/v1/volumes?q=intitle:' + encodeURIComponent(title) + '&maxResults=1');
+    const resp = await fetch('https://openlibrary.org/search.json?title=' + encodeURIComponent(title) + '&limit=1&fields=cover_i');
     const data = await resp.json();
-    const img = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
-    return img ? img.replace('http://', 'https://') : null;
+    const coverId = data.docs?.[0]?.cover_i;
+    return coverId ? 'https://covers.openlibrary.org/b/id/' + coverId + '-L.jpg' : null;
   } catch { return null; }
 }
 
