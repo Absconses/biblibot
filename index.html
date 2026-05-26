@@ -1403,32 +1403,64 @@ function renderPills() {
 renderPills();
 
 /* ===================================================================== */
-/* CURTAIN ANIMATION — opens once on page load, then stays open          */
+/* CURTAIN ANIMATION                                                      */
 /* ===================================================================== */
-function initCurtains() {
-  const theme = CURTAIN_THEMES.default;
+let curtainTimer1, curtainTimer2, curtainTimer3;
+
+function applyCurtainTheme(theme) {
   const curtainBg = `linear-gradient(180deg, transparent 0 calc(100% - 14px), rgba(0,0,0,.4) calc(100% - 14px) 100%), repeating-linear-gradient(90deg, ${theme.plis[0]} 0 14px, ${theme.plis[1]} 14px 18px, ${theme.plis[2]} 18px 32px, ${theme.plis[3]} 32px 36px)`;
   curtainL.style.background = curtainBg;
   curtainR.style.background = curtainBg;
+  curtainL.innerHTML = curtainPatternSVG(theme.pattern, theme.trim);
+  curtainR.innerHTML = curtainPatternSVG(theme.pattern, theme.trim);
   stage.style.setProperty('--trim', theme.trim);
   stage.style.setProperty('--trim-dark', theme.trimDark);
   stage.style.setProperty('--seam', theme.plis[3]);
   pelmet.style.background = theme.pelmet;
-  setTimeout(() => { stage.classList.add('opened'); }, 600);
-  setTimeout(() => { stage.style.display = 'none'; }, 2200);
 }
-initCurtains();
 
-function applyGenreDecor(genreId) {
-  const gData = GENRES.find(x => x.id === genreId) || GENRES[0];
-  decor.innerHTML = genreDecorHTML(genreId, gData.solid);
-  decor.classList.add('shown');
-  if (gData.dark) {
-    chatWrap.style.background = 'linear-gradient(160deg, rgba(40,40,55,.18), rgba(255,255,255,.25))';
-  } else {
-    chatWrap.style.background = `color-mix(in oklab, ${gData.solid} 9%, rgba(255,255,255,.35))`;
-  }
+function triggerCurtain(genreId) {
+  clearTimeout(curtainTimer1);
+  clearTimeout(curtainTimer2);
+  clearTimeout(curtainTimer3);
+
+  stage.style.display = '';
+  const theme = CURTAIN_THEMES[genreId] || CURTAIN_THEMES.default;
+
+  // 1) Close curtains fast
+  stage.classList.add('closing');
+  stage.classList.remove('opened');
+  decor.classList.remove('shown');
+
+  // 2) Swap theme behind closed curtains
+  curtainTimer1 = setTimeout(() => {
+    applyCurtainTheme(theme);
+    stage.classList.remove('closing');
+
+    const gData = GENRES.find(x => x.id === genreId) || GENRES[0];
+    decor.innerHTML = genreDecorHTML(genreId, gData.solid);
+    if (gData.dark) {
+      chatWrap.style.background = 'linear-gradient(160deg, rgba(40,40,55,.18), rgba(255,255,255,.25))';
+    } else {
+      chatWrap.style.background = `color-mix(in oklab, ${gData.solid} 9%, rgba(255,255,255,.35))`;
+    }
+  }, 600);
+
+  // 3) Reopen curtains slowly
+  curtainTimer2 = setTimeout(() => { stage.classList.add('opened'); }, 850);
+
+  // 4) Show decor, then hide stage completely
+  curtainTimer3 = setTimeout(() => {
+    decor.classList.add('shown');
+    setTimeout(() => { stage.style.display = 'none'; }, 600);
+  }, 1800);
 }
+
+// Auto-open on page load — start opened so no lines are visible
+(function initCurtains() {
+  stage.style.display = 'none';
+  stage.classList.add('opened');
+})();
 
 /* ===================================================================== */
 /* DARK MODE                                                              */
@@ -1615,7 +1647,7 @@ function qa(q, genreId) {
   if (genreId) {
     currentGenre = genreId;
     renderPills();
-    applyGenreDecor(genreId);
+    triggerCurtain(genreId);
   }
   inp.value = q;
   send();
