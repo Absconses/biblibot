@@ -1382,7 +1382,6 @@ const pelmet = document.getElementById('pelmet');
 let history = [];
 let lastSendTime = 0;
 let currentGenre = null;
-let curtainTimer1, curtainTimer2, curtainTimer3;
 
 // Render mascots
 document.getElementById('mascotHeader').innerHTML = mascotSVG(56, 66);
@@ -1404,54 +1403,31 @@ function renderPills() {
 renderPills();
 
 /* ===================================================================== */
-/* CURTAIN ANIMATION                                                      */
+/* CURTAIN ANIMATION — opens once on page load, then stays open          */
 /* ===================================================================== */
-function triggerCurtain(genreId) {
-  clearTimeout(curtainTimer1);
-  clearTimeout(curtainTimer2);
-  clearTimeout(curtainTimer3);
-
-  const theme = CURTAIN_THEMES[genreId] || CURTAIN_THEMES.default;
+function initCurtains() {
+  const theme = CURTAIN_THEMES.default;
   const curtainBg = `linear-gradient(180deg, transparent 0 calc(100% - 14px), rgba(0,0,0,.4) calc(100% - 14px) 100%), repeating-linear-gradient(90deg, ${theme.plis[0]} 0 14px, ${theme.plis[1]} 14px 18px, ${theme.plis[2]} 18px 32px, ${theme.plis[3]} 32px 36px)`;
+  curtainL.style.background = curtainBg;
+  curtainR.style.background = curtainBg;
+  stage.style.setProperty('--trim', theme.trim);
+  stage.style.setProperty('--trim-dark', theme.trimDark);
+  stage.style.setProperty('--seam', theme.plis[3]);
+  pelmet.style.background = theme.pelmet;
+  setTimeout(() => { stage.classList.add('opened'); }, 600);
+  setTimeout(() => { stage.style.display = 'none'; }, 2200);
+}
+initCurtains();
 
-  // 1) Close curtains fast
-  stage.classList.add('closing');
-  stage.classList.remove('opened');
-  decor.classList.remove('shown');
-
-  // 2) Swap theme behind closed curtains
-  curtainTimer1 = setTimeout(() => {
-    curtainL.style.background = curtainBg;
-    curtainR.style.background = curtainBg;
-    curtainL.innerHTML = curtainPatternSVG(theme.pattern, theme.trim);
-    curtainR.innerHTML = curtainPatternSVG(theme.pattern, theme.trim);
-    stage.style.setProperty('--trim', theme.trim);
-    stage.style.setProperty('--trim-dark', theme.trimDark);
-    stage.style.setProperty('--seam', theme.plis[3]);
-    pelmet.style.background = theme.pelmet;
-    stage.classList.remove('closing');
-
-    // Update decor
-    const gData = GENRES.find(x => x.id === genreId) || GENRES[0];
-    decor.innerHTML = genreDecorHTML(genreId, gData.solid);
-
-    // Update chat background tint
-    if (gData.dark) {
-      chatWrap.style.background = 'linear-gradient(160deg, rgba(40,40,55,.18), rgba(255,255,255,.25))';
-    } else {
-      chatWrap.style.background = `color-mix(in oklab, ${gData.solid} 9%, rgba(255,255,255,.35))`;
-    }
-  }, 600);
-
-  // 3) Reopen curtains slowly
-  curtainTimer2 = setTimeout(() => {
-    stage.classList.add('opened');
-  }, 850);
-
-  // 4) Show decor
-  curtainTimer3 = setTimeout(() => {
-    decor.classList.add('shown');
-  }, 1800);
+function applyGenreDecor(genreId) {
+  const gData = GENRES.find(x => x.id === genreId) || GENRES[0];
+  decor.innerHTML = genreDecorHTML(genreId, gData.solid);
+  decor.classList.add('shown');
+  if (gData.dark) {
+    chatWrap.style.background = 'linear-gradient(160deg, rgba(40,40,55,.18), rgba(255,255,255,.25))';
+  } else {
+    chatWrap.style.background = `color-mix(in oklab, ${gData.solid} 9%, rgba(255,255,255,.35))`;
+  }
 }
 
 /* ===================================================================== */
@@ -1476,7 +1452,6 @@ function clearChat() {
   history = [];
   currentGenre = null;
   chatWrap.style.background = '';
-  stage.classList.remove('opened', 'closing');
   decor.classList.remove('shown');
   decor.innerHTML = '';
   renderPills();
@@ -1512,12 +1487,25 @@ function fmt(t) {
 }
 
 async function fetchCover(title) {
+  // Try Open Library search API
   try {
-    const resp = await fetch('https://openlibrary.org/search.json?title=' + encodeURIComponent(title) + '&limit=1&fields=cover_i');
-    const data = await resp.json();
-    const coverId = data.docs?.[0]?.cover_i;
-    return coverId ? 'https://covers.openlibrary.org/b/id/' + coverId + '-L.jpg' : null;
-  } catch { return null; }
+    const resp = await fetch('https://openlibrary.org/search.json?q=' + encodeURIComponent(title) + '&limit=1&fields=cover_i');
+    if (resp.ok) {
+      const data = await resp.json();
+      const coverId = data.docs?.[0]?.cover_i;
+      if (coverId) return 'https://covers.openlibrary.org/b/id/' + coverId + '-L.jpg';
+    }
+  } catch {}
+  // Fallback: Google Books API
+  try {
+    const resp = await fetch('https://www.googleapis.com/books/v1/volumes?q=intitle:' + encodeURIComponent(title) + '&maxResults=1');
+    if (resp.ok) {
+      const data = await resp.json();
+      const img = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+      if (img) return img.replace('http://', 'https://');
+    }
+  } catch {}
+  return null;
 }
 
 async function addCovers(titles) {
@@ -1627,7 +1615,7 @@ function qa(q, genreId) {
   if (genreId) {
     currentGenre = genreId;
     renderPills();
-    triggerCurtain(genreId);
+    applyGenreDecor(genreId);
   }
   inp.value = q;
   send();
