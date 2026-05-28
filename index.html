@@ -1456,10 +1456,14 @@ function triggerCurtain(genreId) {
   }, 1800);
 }
 
-// Auto-open on page load — start opened so no lines are visible
+// Entrance animation: curtains closed on arrival, then open dramatically
 (function initCurtains() {
-  stage.style.display = 'none';
-  stage.classList.add('opened');
+  const theme = CURTAIN_THEMES.default;
+  applyCurtainTheme(theme);
+  stage.style.display = '';
+  stage.classList.remove('opened');
+  setTimeout(() => { stage.classList.add('opened'); }, 800);
+  setTimeout(() => { stage.style.display = 'none'; }, 2800);
 })();
 
 /* ===================================================================== */
